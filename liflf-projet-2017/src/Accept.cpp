@@ -21,7 +21,6 @@ bool EstDeterministe(const sAutoNDE& at)
     i = 0;
     while((i<at.epsilon.size())&&(deterministe==true))
     {
-        std::cout << "first ep while : "<< at.epsilon[i] << std::endl;
         if(at.epsilon[i].size())
         {
             deterministe = false;
@@ -31,11 +30,9 @@ bool EstDeterministe(const sAutoNDE& at)
     i = 0;
     while((i<at.trans.size())&&(deterministe==true))
     {
-        std::cout << "first while : " << std::endl;
         j = 0;
         while((j<at.trans[i].size())&&(deterministe==true))
         {
-            std::cout << "second while : info :" << at.trans[i][j].size() << std::endl;
             if(at.trans[i][j].size()>1)
             {
                 deterministe = false;
@@ -45,7 +42,6 @@ bool EstDeterministe(const sAutoNDE& at)
         i++;
     }
 
-    std::cerr << "det ? : " << deterministe << std::endl;
     return deterministe;
 }
 

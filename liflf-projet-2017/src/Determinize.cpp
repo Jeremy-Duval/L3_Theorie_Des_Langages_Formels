@@ -13,8 +13,6 @@ sAutoNDE Determinize(const sAutoNDE& at){
 
   sAutoNDE r;
 
-  EstDeterministe(at);
-
   return r;
 }
 
