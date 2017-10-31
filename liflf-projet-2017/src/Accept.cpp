@@ -57,12 +57,20 @@ void Fermeture(const sAutoNDE& at, etatset_t& e)
 
 etatset_t Delta(const sAutoNDE& at, const etatset_t& e, symb_t c)
 {
+    //TODO :
+    //  récup elem de e et stocker
+    //  pour chaque espsilon/trans[elem_e] (pour la lettre si trans) stocker dans r elem d'arrivé
+
+
+
+
     unsigned int symb_ascii, i;
     etatset_t r;
 
     symb_ascii = c-96;
 
     std::cout<< "sym : " << symb_ascii << std::endl;
+    std::cout<< "e : " << e << std::endl;
 
     if(symb_ascii>at.nb_symbs){
         //la lettre est une epsilon transition
@@ -76,14 +84,23 @@ etatset_t Delta(const sAutoNDE& at, const etatset_t& e, symb_t c)
             }
             i++;
         }
-        std::cout<< "r : " << r << std::endl;
     }
     else {
         //la lettre doit être taitée normalement
 
+        i=0;
+        while(i<at.trans.size()){
+            std::cout<< "tra : " << at.trans[i] << std::endl;
+            std::cout<< "tra lettre : " << at.trans[i][symb_ascii-1] << std::endl;
+            if(at.trans[i][symb_ascii-1].size()!=0){
+                std::cout<< "trans > 0 " << std::endl;
+                r.insert(i);//dans le cas d'une epsilon transition, on doit ajouter l'indice car l'élément lu est en fait l'état dans lequel ont arrive par E-transition
+            }
+            i++;
+        }
 
     }
-
+    std::cout<< "r : " << r << std::endl;
     return r;
 }
 
