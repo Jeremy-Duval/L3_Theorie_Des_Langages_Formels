@@ -13,6 +13,8 @@ sAutoNDE Determinize(const sAutoNDE& at){
 
   sAutoNDE r;
 
+  Delta(at, at.trans[0][0], 'd');
+
   return r;
 }
 
