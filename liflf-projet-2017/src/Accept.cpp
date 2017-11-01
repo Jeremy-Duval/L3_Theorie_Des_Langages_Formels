@@ -69,43 +69,38 @@ etatset_t Delta(const sAutoNDE& at, const etatset_t& e, symb_t c)
 
     symb_ascii = c-96;
 
-    std::cout<< "sym : " << symb_ascii << std::endl;
-    std::cout<< "e : " << e << std::endl;
-
-    if(symb_ascii>at.nb_symbs){
+    if(symb_ascii>at.nb_symbs)
+    {
         //la lettre est une epsilon transition
 
-        for(itr = e.begin(); itr!=e.end(); itr++){
-            std::cout << "***********************" << *itr <<std::endl;
-            std::cout << "e itr : " << *itr <<std::endl;
-            std::cout<< "epsilon : " << at.epsilon << std::endl;
-            if(*itr<at.epsilon.size()){
-               std::cout<< "epsilon itr : " << at.epsilon[*itr] << std::endl;
+        for(itr = e.begin(); itr!=e.end(); itr++)
+        {
+            if(*itr<at.epsilon.size())
+            {
+                std::cout<< "epsilon itr : " << at.epsilon[*itr] << std::endl;
                 itr2 = at.epsilon[*itr].begin();
-                if(at.epsilon[*itr].size()!=0){
-                    std::cout<< "epsilon > 0 " << std::endl;
+                if(at.epsilon[*itr].size()!=0)
+                {
                     r.insert(*itr2);//dans le cas d'une epsilon transition, on doit ajouter l'indice car l'élément lu est en fait l'état dans lequel ont arrive par E-transition
                 }
             }
         }
     }
-    else {
+    else
+    {
         //la lettre doit être taitée normalement
 
-        for(itr = e.begin(); itr!=e.end(); itr++){
-            std::cout << "***********************" << *itr <<std::endl;
-            std::cout << "e itr : " << *itr <<std::endl;
-            std::cout<< "tra : " << at.trans[*itr] << std::endl;
-            std::cout<< "tra lettre : " << at.trans[*itr][symb_ascii-1] << std::endl;
+        for(itr = e.begin(); itr!=e.end(); itr++)
+        {
             itr2 = at.trans[*itr][symb_ascii-1].begin();
-            if(at.trans[*itr][symb_ascii-1].size()!=0){
-                std::cout<< "trans > 0 " << std::endl;
+            if(at.trans[*itr][symb_ascii-1].size()!=0)
+            {
                 r.insert(*itr2);//dans le cas d'une epsilon transition, on doit ajouter l'indice car l'élément lu est en fait l'état dans lequel ont arrive par E-transition
             }
         }
 
     }
-    std::cout<< "r : " << r << std::endl;
+
     return r;
 }
 
