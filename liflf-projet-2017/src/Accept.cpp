@@ -49,7 +49,21 @@ bool EstDeterministe(const sAutoNDE& at)
 
 void Fermeture(const sAutoNDE& at, etatset_t& e)
 {
-    //TODO définir cette fonction
+    //TODO :
+    //V-Calculer une lettre E-transition : c
+    //V-appeler r = Delta(at, e, c)
+    //pour chaque r : l'ajouter à e (ajout simple ou fusion :
+                                      //si on a e={1} et r={5} :
+                                      //e final = {1},{5} ou {1,5} ?
+    //afficher r pour le test
+
+    symb_t c;
+    etatset_t depuis_E_trans;
+
+    c = at.nb_symbs + ASCII_A;  //Calcule d'une lettre E-transition
+    std::cout << "nb_symbs : " << at.nb_symbs << " et lettre : " << c << std::endl;
+
+    depuis_E_trans = Delta(at, e, c);
 
 }
 
@@ -57,17 +71,12 @@ void Fermeture(const sAutoNDE& at, etatset_t& e)
 
 etatset_t Delta(const sAutoNDE& at, const etatset_t& e, symb_t c)
 {
-    //TODO :
-    //  récup elem de e et stocker
-    //  pour chaque espsilon/trans[elem_e] (pour la lettre si trans) stocker dans r elem d'arrivé
-
-
 
     std::set<etat_t>::const_iterator itr, itr2;
     unsigned int symb_ascii;
     etatset_t r;
 
-    symb_ascii = c-96;
+    symb_ascii = c-96; //donne la place de la lettre dans l'alphabet (c-96)
 
     if(symb_ascii>at.nb_symbs)
     {
@@ -77,7 +86,6 @@ etatset_t Delta(const sAutoNDE& at, const etatset_t& e, symb_t c)
         {
             if(*itr<at.epsilon.size())
             {
-                std::cout<< "epsilon itr : " << at.epsilon[*itr] << std::endl;
                 itr2 = at.epsilon[*itr].begin();
                 if(at.epsilon[*itr].size()!=0)
                 {
@@ -92,10 +100,13 @@ etatset_t Delta(const sAutoNDE& at, const etatset_t& e, symb_t c)
 
         for(itr = e.begin(); itr!=e.end(); itr++)
         {
-            itr2 = at.trans[*itr][symb_ascii-1].begin();
-            if(at.trans[*itr][symb_ascii-1].size()!=0)
+            if(*itr<at.trans.size())
             {
-                r.insert(*itr2);//dans le cas d'une epsilon transition, on doit ajouter l'indice car l'élément lu est en fait l'état dans lequel ont arrive par E-transition
+                itr2 = at.trans[*itr][symb_ascii-1].begin();
+                if(at.trans[*itr][symb_ascii-1].size()!=0)
+                {
+                    r.insert(*itr2);//dans le cas d'une epsilon transition, on doit ajouter l'indice car l'élément lu est en fait l'état dans lequel ont arrive par E-transition
+                }
             }
         }
 
