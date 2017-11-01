@@ -13,7 +13,13 @@ sAutoNDE Determinize(const sAutoNDE& at){
 
   sAutoNDE r;
 
-  Delta(at, at.trans[0][0], 'a');
+    etatset_t Nes;
+    Nes.insert(0);
+    Nes.insert(1);
+    Nes.insert(3);
+    std::cout << "Nes : " << Nes <<std::endl;
+
+  Delta(at, Nes, 'd');
 
   return r;
 }

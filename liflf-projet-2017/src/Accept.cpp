@@ -63,8 +63,8 @@ etatset_t Delta(const sAutoNDE& at, const etatset_t& e, symb_t c)
 
 
 
-
-    unsigned int symb_ascii, i;
+    std::set<etat_t>::const_iterator itr, itr2;
+    unsigned int symb_ascii;
     etatset_t r;
 
     symb_ascii = c-96;
@@ -75,28 +75,33 @@ etatset_t Delta(const sAutoNDE& at, const etatset_t& e, symb_t c)
     if(symb_ascii>at.nb_symbs){
         //la lettre est une epsilon transition
 
-        i=0;
-        while(i<at.epsilon.size()){
-            std::cout<< "eps : " << at.epsilon[i] << std::endl;
-            if(at.epsilon[i].size()!=0){
-                std::cout<< "eps > 0 " << std::endl;
-                r.insert(i);//dans le cas d'une epsilon transition, on doit ajouter l'indice car l'élément lu est en fait l'état dans lequel ont arrive par E-transition
+        for(itr = e.begin(); itr!=e.end(); itr++){
+            std::cout << "***********************" << *itr <<std::endl;
+            std::cout << "e itr : " << *itr <<std::endl;
+            std::cout<< "epsilon : " << at.epsilon << std::endl;
+            if(*itr<at.epsilon.size()){
+               std::cout<< "epsilon itr : " << at.epsilon[*itr] << std::endl;
+                itr2 = at.epsilon[*itr].begin();
+                if(at.epsilon[*itr].size()!=0){
+                    std::cout<< "epsilon > 0 " << std::endl;
+                    r.insert(*itr2);//dans le cas d'une epsilon transition, on doit ajouter l'indice car l'élément lu est en fait l'état dans lequel ont arrive par E-transition
+                }
             }
-            i++;
         }
     }
     else {
         //la lettre doit être taitée normalement
 
-        i=0;
-        while(i<at.trans.size()){
-            std::cout<< "tra : " << at.trans[i] << std::endl;
-            std::cout<< "tra lettre : " << at.trans[i][symb_ascii-1] << std::endl;
-            if(at.trans[i][symb_ascii-1].size()!=0){
+        for(itr = e.begin(); itr!=e.end(); itr++){
+            std::cout << "***********************" << *itr <<std::endl;
+            std::cout << "e itr : " << *itr <<std::endl;
+            std::cout<< "tra : " << at.trans[*itr] << std::endl;
+            std::cout<< "tra lettre : " << at.trans[*itr][symb_ascii-1] << std::endl;
+            itr2 = at.trans[*itr][symb_ascii-1].begin();
+            if(at.trans[*itr][symb_ascii-1].size()!=0){
                 std::cout<< "trans > 0 " << std::endl;
-                r.insert(i);//dans le cas d'une epsilon transition, on doit ajouter l'indice car l'élément lu est en fait l'état dans lequel ont arrive par E-transition
+                r.insert(*itr2);//dans le cas d'une epsilon transition, on doit ajouter l'indice car l'élément lu est en fait l'état dans lequel ont arrive par E-transition
             }
-            i++;
         }
 
     }
