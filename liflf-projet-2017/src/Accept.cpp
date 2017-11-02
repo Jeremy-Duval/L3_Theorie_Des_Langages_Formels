@@ -12,27 +12,39 @@ bool EstDeterministe(const sAutoNDE& at)
 {
     bool deterministe = true;
     unsigned int i,j;
+    std::set<etat_t>::const_iterator itr;
 
     /*
     * Un automate est non-deterministe si :
     *     Il a des epsilon transition
     *     Il a plusieurs transition d'un point A à un point B avec la même lettre
+    *     Un état n'a pas toute les transitions possibles
     */
     i = 0;
     while((i<at.epsilon.size())&&(deterministe==true))
     {
-        if(at.epsilon[i].size())
+        if(at.epsilon[i].size()!=0)
         {
             deterministe = false;
         }
         i++;
     }
     i = 0;
+
+    std::cout<<"tr : "<<at.trans<<std::endl;
+        std::cout<<"eps : "<<at.epsilon<<std::endl;
     while((i<at.trans.size())&&(deterministe==true))
     {
         j = 0;
+
+        std::cout<<"tr i : "<<at.trans[i]<<std::endl;
+        std::cout<<"eps j : "<<at.epsilon[i]<<std::endl;
         while((j<at.trans[i].size())&&(deterministe==true))
         {
+            std::cout<<"tr ij : "<<at.trans[i][j]<<std::endl;
+            itr = at.trans[i][j].begin();
+            std::cout<<"itr : "<<*itr<<std::endl;
+
             if(at.trans[i][j].size()>1)
             {
                 deterministe = false;
@@ -42,6 +54,7 @@ bool EstDeterministe(const sAutoNDE& at)
         i++;
     }
 
+    std::cout<<"Det ? : "<<deterministe<<std::endl;
     return deterministe;
 }
 
