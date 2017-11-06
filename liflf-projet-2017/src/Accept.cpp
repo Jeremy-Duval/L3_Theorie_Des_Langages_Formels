@@ -50,11 +50,6 @@ bool EstDeterministe(const sAutoNDE& at)
 
 void Fermeture(const sAutoNDE& at, etatset_t& e)
 {
-    //TODO :
-    //V-Calculer une lettre E-transition : c
-    //V-appeler r = Delta(at, e, c)
-    //pour chaque r : l'ajouter à e
-    //afficher r pour le test
 
     symb_t c;
     etatset_t depuis_E_trans, e_prec;
@@ -66,13 +61,7 @@ void Fermeture(const sAutoNDE& at, etatset_t& e)
     {
         depuis_E_trans = e;
         e_prec = e;
-        std::cout<<"e : "<<e<<std::endl;
-        std::cout<<"dep : "<<depuis_E_trans<<std::endl;
-        std::cout<<"dep p : "<<e_prec<<std::endl;
         depuis_E_trans = Delta(at, e, c);   //On récupère les etat accessible depuis chaque état de e grâce à des E-transitions
-        std::cout<<"dep : "<<depuis_E_trans<<std::endl;
-
-        std::cout<<"!= "<<std::endl;
 
         //on ajoute chaque élément de la liste obtenue à celle passée en pramètre
         for(itr = depuis_E_trans.begin(); itr!=depuis_E_trans.end(); itr++)
@@ -149,10 +138,6 @@ bool Accept(const sAutoNDE& at, std::string str)
     etatset_t etat_accessible;
     std::set<etat_t>::const_iterator itr, itr2;
 
-
-    std::cout<<"Trans : "<<at.trans<<std::endl;
-    std::cout<<"str : "<<str<<std::endl;
-
     //insertion de l'etat initial
     etat_accessible.insert(at.initial);
     Fermeture(at,etat_accessible);
@@ -160,21 +145,16 @@ bool Accept(const sAutoNDE& at, std::string str)
     i=0;
     while(i<str.size())
     {
-        std::cout<<"str i : "<<str.at(i)<<std::endl;
         symb_ascii = str.at(i); //extraction d'une lettre
-        std::cout<<"etat_ac av : "<<etat_accessible<<std::endl;
 
         etat_accessible = Delta(at,etat_accessible,symb_ascii);
-        std::cout<<"etat_ac ap : "<<etat_accessible<<std::endl;
         Fermeture(at,etat_accessible);
-        std::cout<<"etat_ac ap E : "<<etat_accessible<<std::endl;
 
         i++;
     }
 
     //chercher si un des etat est final
     est_accepte = false;
-    std::cout<<"finaux : "<<at.finaux<<std::endl;
     itr = etat_accessible.begin();
     while((itr!=etat_accessible.end())&&(est_accepte==false))
     {
@@ -189,7 +169,7 @@ bool Accept(const sAutoNDE& at, std::string str)
         }
         itr++;
     }
-    std::cout<<"est ec : "<<est_accepte<<std::endl;
+
     return est_accepte;
 }
 
