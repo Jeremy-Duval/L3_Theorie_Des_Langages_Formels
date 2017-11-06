@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <string>
 
 #include "Accept.h"
 #include "FA_tools.h"
@@ -56,17 +57,31 @@ void Fermeture(const sAutoNDE& at, etatset_t& e)
     //afficher r pour le test
 
     symb_t c;
-    etatset_t depuis_E_trans;
+    etatset_t depuis_E_trans, e_prec;
     std::set<etat_t>::const_iterator itr;
 
     c = at.nb_symbs + ASCII_A;  //Calcule d'une lettre E-transition
 
-    depuis_E_trans = Delta(at, e, c);   //On récupère les etat accessible depuis chaque état de e grâce à des E-transitions
-    //on ajoute chaque élément de la liste obtenue à celle passée en pramètre
-    for(itr = depuis_E_trans.begin(); itr!=depuis_E_trans.end(); itr++)
+    do
     {
-        e.insert(*itr);
+        depuis_E_trans = e;
+        e_prec = e;
+        std::cout<<"e : "<<e<<std::endl;
+        std::cout<<"dep : "<<depuis_E_trans<<std::endl;
+        std::cout<<"dep p : "<<e_prec<<std::endl;
+        depuis_E_trans = Delta(at, e, c);   //On récupère les etat accessible depuis chaque état de e grâce à des E-transitions
+        std::cout<<"dep : "<<depuis_E_trans<<std::endl;
+
+        std::cout<<"!= "<<std::endl;
+
+        //on ajoute chaque élément de la liste obtenue à celle passée en pramètre
+        for(itr = depuis_E_trans.begin(); itr!=depuis_E_trans.end(); itr++)
+        {
+            e.insert(*itr);
+        }
+
     }
+    while(e_prec.size()!=e.size());
 
 }
 
@@ -79,7 +94,7 @@ etatset_t Delta(const sAutoNDE& at, const etatset_t& e, symb_t c)
     unsigned int symb_ascii;
     etatset_t r;
 
-    symb_ascii = c-96; //donne la place de la lettre dans l'alphabet (c-96)
+    symb_ascii = c-(ASCII_A-1); //donne la place de la lettre dans l'alphabet (c-96)
 
     if(symb_ascii>at.nb_symbs)
     {
@@ -105,6 +120,7 @@ etatset_t Delta(const sAutoNDE& at, const etatset_t& e, symb_t c)
 
         for(itr = e.begin(); itr!=e.end(); itr++)
         {
+
             if(*itr<at.trans.size())
             {
                 //itr2 = at.trans[*itr][symb_ascii-1].begin();
@@ -127,9 +143,54 @@ etatset_t Delta(const sAutoNDE& at, const etatset_t& e, symb_t c)
 
 bool Accept(const sAutoNDE& at, std::string str)
 {
-    //TODO définir cette fonction
+    bool est_accepte;
+    unsigned int i;
+    char symb_ascii;
+    etatset_t etat_accessible;
+    std::set<etat_t>::const_iterator itr, itr2;
 
-    return false;
+
+    std::cout<<"Trans : "<<at.trans<<std::endl;
+    std::cout<<"str : "<<str<<std::endl;
+
+    //insertion de l'etat initial
+    etat_accessible.insert(at.initial);
+    Fermeture(at,etat_accessible);
+
+    i=0;
+    while(i<str.size())
+    {
+        std::cout<<"str i : "<<str.at(i)<<std::endl;
+        symb_ascii = str.at(i); //extraction d'une lettre
+        std::cout<<"etat_ac av : "<<etat_accessible<<std::endl;
+
+        etat_accessible = Delta(at,etat_accessible,symb_ascii);
+        std::cout<<"etat_ac ap : "<<etat_accessible<<std::endl;
+        Fermeture(at,etat_accessible);
+        std::cout<<"etat_ac ap E : "<<etat_accessible<<std::endl;
+
+        i++;
+    }
+
+    //chercher si un des etat est final
+    est_accepte = false;
+    std::cout<<"finaux : "<<at.finaux<<std::endl;
+    itr = etat_accessible.begin();
+    while((itr!=etat_accessible.end())&&(est_accepte==false))
+    {
+        itr2 = at.finaux.begin();
+        while((itr2!=at.finaux.end())&&(est_accepte==false))
+        {
+            if(*itr==*itr2)
+            {
+                est_accepte = true;
+            }
+            itr2++;
+        }
+        itr++;
+    }
+    std::cout<<"est ec : "<<est_accepte<<std::endl;
+    return est_accepte;
 }
 
 //******************************************************************************

@@ -13,6 +13,8 @@ sAutoNDE Determinize(const sAutoNDE& at){
 
   sAutoNDE r;
 
+    Accept(at, "aabbaaa");
+
   return r;
 }
 
