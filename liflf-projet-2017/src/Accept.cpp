@@ -133,7 +133,7 @@ etatset_t Delta(const sAutoNDE& at, const etatset_t& e, symb_t c)
 bool Accept(const sAutoNDE& at, std::string str)
 {
     bool est_accepte;
-    unsigned int i;
+    unsigned int i, place_ascii;
     char symb_ascii;
     etatset_t etat_accessible;
     std::set<etat_t>::const_iterator itr, itr2;
@@ -142,32 +142,44 @@ bool Accept(const sAutoNDE& at, std::string str)
     etat_accessible.insert(at.initial);
     Fermeture(at,etat_accessible);
 
+    est_accepte = true;
     i=0;
-    while(i<str.size())
+    while((i<str.size())&&(est_accepte))
     {
         symb_ascii = str.at(i); //extraction d'une lettre
+        place_ascii = symb_ascii-(ASCII_A-1); //donne la place de la lettre dans l'alphabet
 
-        etat_accessible = Delta(at,etat_accessible,symb_ascii);
-        Fermeture(at,etat_accessible);
+        if(place_ascii<=at.nb_symbs) //dans le cas contraire, la lettre n'est pas reconnue comme E-transition
+        {
+            etat_accessible = Delta(at,etat_accessible,symb_ascii);
+            Fermeture(at,etat_accessible);
+        }
+        else
+        {
+            est_accepte = false;
+        }
 
         i++;
     }
 
-    //chercher si un des etat est final
-    est_accepte = false;
-    itr = etat_accessible.begin();
-    while((itr!=etat_accessible.end())&&(est_accepte==false))
+    if(est_accepte) //si on a pas déjà reconnu une lettre non acceptée
     {
-        itr2 = at.finaux.begin();
-        while((itr2!=at.finaux.end())&&(est_accepte==false))
+        //chercher si un des etat est final
+        est_accepte = false;
+        itr = etat_accessible.begin();
+        while((itr!=etat_accessible.end())&&(est_accepte==false))
         {
-            if(*itr==*itr2)
+            itr2 = at.finaux.begin();
+            while((itr2!=at.finaux.end())&&(est_accepte==false))
             {
-                est_accepte = true;
+                if(*itr==*itr2)
+                {
+                    est_accepte = true;
+                }
+                itr2++;
             }
-            itr2++;
+            itr++;
         }
-        itr++;
     }
 
     return est_accepte;
