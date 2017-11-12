@@ -1,10 +1,8 @@
 Rendu du projet LIIFLC 2017-2018
 ================================
 
-BRANDON   Romuald   #123456
-THIEL     Sylvain   #456789
-
-Voir http://liris.cnrs.fr/sylvain.brandel/wiki/doku.php?id=ens:liflf:projet
+PERROT  Alexis   #11503252
+DUVAL   Jeremy   #11501022
 
 Contenu de l'archive
 --------------------
@@ -20,19 +18,7 @@ exemples/         exemples d'automates :
                     NDE = Non Déterministe avec transitions spontanées
 src/              fichiers sources C++
 
-
-Documentation de référence
---------------------------
-
-http://www.cplusplus.com/reference/
-
 Commentaires
 ------------
 
-Cet exemple d'archive est fournie aux étudiants comme projet de départ pde l'UE LIFLC 2017-2018
-
-Pour utiliser la sortie graphique, utilisez le package graphviz https://doc.ubuntu-fr.org/graphviz
-
-
-Mettre ici les commentaires éventuels des étudiants.
-Tous les warnings, info résiduels doivent être justifiés ici.
+La fonction determinize n'a pas pu être terminée dans les délais, le fichier determinize.cpp peut cependant être compilé et la fonction testée. Celle-ci ne retournera pas l'automate voulu, seul un retour écrit dans la sortie standard qui retrace les opérations effectuées peut être observé en cas d'exécution de la commande "./ndet -det [IN] [OUT]".
