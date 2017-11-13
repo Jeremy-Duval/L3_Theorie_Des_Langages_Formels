@@ -40,7 +40,7 @@ int main(int argc, char* argv[] ){
     Help(std::cout, argv[0]);
     return EXIT_FAILURE;
   }
-  
+
   int pos;
   int act=-1;                 // pos et act pour savoir quelle action effectuer
   int nb_ifiles = 0;          // nombre de fichiers en entrée
@@ -49,14 +49,14 @@ int main(int argc, char* argv[] ){
   sExpressionRationnelle er;
   unsigned int word_size_max; // pour la pseudo équivalence
   // chaines pour (resp.) tampon; fichier d'entrée Input1; fichier d'entrée Input2;
-  // fichier de sortie et chaine dont l'acceptation est à tester 
+  // fichier de sortie et chaine dont l'acceptation est à tester
   bool graphMode=false;     // sortie graphviz ?
 
   // options acceptées
   const size_t NBOPT = 8;
   std::string aLN[] = {"accept", "determinize", "automate2expressionrationnelle", "minimize", "pseudo-equivalent", "equivalent", "no_operation", "graph"};
   std::string aSN[] = {"acc", "det", "aut2expr", "min", "pequ", "equ", "nop", "g"};
-  
+
   // on essaie de "parser" chaque option de la ligne de commande
   for(int i=1; i<argc; ++i){
     if (DEBUG) std::cerr << "argv[" << i << "] = '" << argv[i] << "'" << std::endl;
@@ -64,12 +64,12 @@ int main(int argc, char* argv[] ){
     pos = -1;
     std::string* pL = find(aLN, aLN+NBOPT, str.substr(1));
     std::string* pS = find(aSN, aSN+NBOPT, str.substr(1));
-    
+
     if(pL!=aLN+NBOPT)
       pos = pL - aLN;
     if(pS!=aSN+NBOPT)
-      pos = pS - aSN;   
-      
+      pos = pS - aSN;
+
     if(pos != -1){
       // (pos != -1) <=> on a trouvé une option longue ou courte
       if (DEBUG) std::cerr << "Key found (" << pos << ") : " << str << std::endl;
@@ -92,7 +92,7 @@ int main(int argc, char* argv[] ){
 	  nb_ofiles = 0;
           break;
         case 3: //min
-          expr = argv[++i];
+          inl = argv[++i];
           out = argv[++i];
 	  nb_ifiles = 1;
 	  nb_ofiles = 1;
@@ -115,7 +115,7 @@ int main(int argc, char* argv[] ){
           out = argv[++i];
 	  nb_ifiles = 1;
 	  nb_ofiles = 1;
-          break;          
+          break;
         case 7: //g
           graphMode = true;
           break;
@@ -127,7 +127,7 @@ int main(int argc, char* argv[] ){
       std::cerr << "Option inconnue "<< str << std::endl;
       return EXIT_FAILURE;
     }
-    
+
     if(pos<7){
       if(act > -1){
         std::cerr << "Plusieurs actions spécififées"<< std::endl;
@@ -135,29 +135,29 @@ int main(int argc, char* argv[] ){
       }
       else
         act = pos;
-    }    
+    }
   }
-  
+
   if (act == -1){
     std::cerr << "Pas d'action spécififée"<< std::endl;
     return EXIT_FAILURE;
-  }  
+  }
 
 /* Les options sont OK, on va essayer de lire le(s) automate(s) at1 (et at2)
 et effectuer l'action spécifiée. Atr stockera le résultat*/
 
   sAutoNDE at1, at2, atr;
-  
+
   // lecture du des fichiers en entrée
   if ((nb_ifiles == 1 or nb_ifiles == 2) and !FromFile(at1, in1)){
     std::cerr << "Erreur de lecture " << in1 << std::endl;
     return EXIT_FAILURE;
-  }  
+  }
   if (nb_ifiles ==2 and !FromFile(at2, in2)){
     std::cerr << "Erreur de lecture " << in2 << std::endl;
     return EXIT_FAILURE;
-  }  
-  
+  }
+
   switch(act) {
   case 0: //acc
     if (Accept(at1, acc)){
@@ -208,10 +208,10 @@ et effectuer l'action spécifiée. Atr stockera le résultat*/
     // cout << atr;
 
     // écriture dans un fichier texte
-    std::ofstream f((out + ".txt").c_str(), std::ios::trunc); 
+    std::ofstream f((out + ".txt").c_str(), std::ios::trunc);
     if(f.fail())
       return EXIT_FAILURE;
-    f << atr;    
+    f << atr;
 
     // génération d'un fichier graphviz
     if(graphMode){
@@ -219,7 +219,7 @@ et effectuer l'action spécifiée. Atr stockera le résultat*/
       system(("dot -Tpng " + out + ".gv -o " + out + ".png").c_str());
     }
   }
-  
+
   return EXIT_SUCCESS;
 }
 
