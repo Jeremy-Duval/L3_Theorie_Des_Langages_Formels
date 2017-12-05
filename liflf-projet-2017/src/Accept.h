@@ -19,7 +19,7 @@ etatset_t Delta(const sAutoNDE& at, const etatset_t& e, symb_t c);
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool Accept(const sAutoNDE& at, std::string str);
+bool Accept( sAutoNDE& at, std::string str);
 
 //******************************************************************************
 #endif // ACCEPT_H

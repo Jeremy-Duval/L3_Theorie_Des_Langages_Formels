@@ -7,10 +7,14 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-std::string Automate2ExpressionRationnelle(sAutoNDE at){
-  //TODO définir cette fonction
+std::string Automate2ExpressionRationnelle(sAutoNDE &at){
+
+
+    /* CODER DANS ACCEPT ; A LA FIN ! */
 
   std::string sr;
+
+    sr="pouet";
 
   return sr;
 }
