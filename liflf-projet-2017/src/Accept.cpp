@@ -219,6 +219,17 @@ std::cout << "****************************************" <<std::endl;
     //décalage de at.trans
 
     //pour chaque lettre, on ajoute une E-transition partant du nouvel etat 0
+
+
+
+
+
+    //TODO : prendre en compte que la E-transition doit etre seulement vers l'ancien E-transition
+    // ->Modif at.epsilon_trans
+
+
+
+
     i=0;
     while(i<at.nb_symbs)
     {
