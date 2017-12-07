@@ -229,10 +229,12 @@ std::cout << "****************************************" <<std::endl;
     std::cout<<"at.trans : "<<at.trans<<std::endl;
 
     //on ajoute la E-transition du nouvel état de départ vers l'ancien
-    tmp_es.insert(at.initial);
+    tmp_es.insert(at.initial+1);
     at.epsilon.insert(at.epsilon.begin(), tmp_es);
     std::cout << "epsilon : " << at.epsilon <<std::endl;
 
+    at.initial=0;
+    std::cout << "initial : " << at.initial <<std::endl;
     //on décale les liaisons
     auto itr_i=at.trans.begin();
     itr_i++;//on ne veux pas l'état qui viens d'être ajouté
@@ -301,7 +303,7 @@ std::cout << "****************************************" <<std::endl;
     std::cout << "at.finaux : " << at.finaux <<std::endl;
     at.nb_finaux=1;
     at.finaux.clear();
-    at.finaux.insert(at.finaux.begin(), at.nb_etats);
+    at.finaux.insert(at.finaux.begin(), at.nb_etats-1);
     std::cout << "nb_finaux : " << at.nb_finaux <<std::endl;
     std::cout << "at.finaux : " << at.finaux <<std::endl;
 
