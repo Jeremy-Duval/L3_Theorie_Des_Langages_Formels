@@ -198,10 +198,9 @@ std::cout << "****************************************" <<std::endl;
     /* CODER DANS ACCEPT ; A LA FIN ! */
 
   std::string sr;
-  int epsilon_trans, j;
+  unsigned int j;
   std::vector<etatset_t> tmp_vect_es;
   etatset_t tmp_es, tmp_copie_es;
-  etat_t tmp_e;
     //int i;
 
   std::cout << "nb_etats : " << at.nb_etats <<std::endl;
@@ -212,24 +211,14 @@ std::cout << "****************************************" <<std::endl;
   std::cout << "epsilon : " << at.epsilon <<std::endl;
   std::cout << "****************************************" <<std::endl;
 
+  /* ******************************************************* */
+  /* **********Arrangement de l'automate en entrée********** */
+  /* ******************************************************* */
+
     /* ***Décalage des symbole et ajout d'un état de départ  générique***/
-    epsilon_trans = at.nb_symbs+1;
     at.nb_etats++;
 
     //décalage de at.trans
-
-    //pour chaque lettre, on ajoute une E-transition partant du nouvel etat 0
-
-
-
-
-
-    //TODO : prendre en compte que la E-transition doit etre seulement vers l'ancien E-transition
-    // ->Modif at.epsilon_trans
-
-
-
-
     i=0;
     while(i<at.nb_symbs)
     {
@@ -238,6 +227,11 @@ std::cout << "****************************************" <<std::endl;
     }
     at.trans.insert(at.trans.begin(),tmp_vect_es);
     std::cout<<"at.trans : "<<at.trans<<std::endl;
+
+    //on ajoute la E-transition du nouvel état de départ vers l'ancien
+    tmp_es.insert(at.initial);
+    at.epsilon.insert(at.epsilon.begin(), tmp_es);
+    std::cout << "epsilon : " << at.epsilon <<std::endl;
 
     //on décale les liaisons
     auto itr_i=at.trans.begin();
@@ -276,13 +270,47 @@ std::cout << "****************************************" <<std::endl;
     }
     std::cout<<"at.trans : "<<at.trans<<std::endl;
 
+    //ajout de l'état final générique
+    at.nb_etats++;
 
-    //TODO :
-    //ajout d'un unique etat final (nb etat++)
-    //transition spontanée des anciens etat finaux vers le nouveau
-    //changer at.nb_finaux et at.finaux
+    tmp_es.clear();
+    tmp_vect_es.clear();
+    i=0;
+    while(i<at.nb_symbs)
+    {
+        tmp_vect_es.push_back(tmp_es);
+        i++;
+    }
+    at.trans.insert(at.trans.end(),tmp_vect_es);
+    std::cout<<"at.trans : "<<at.trans<<std::endl;
 
-  std::cout<<"Sr : "<<sr<<std::endl;
+
+    at.epsilon.insert(at.epsilon.end(), tmp_es);
+
+    //ajout d'une e-transition des anciens etats finaux vers le nouveau
+    auto itr_finaux=at.finaux.begin();
+    while(itr_finaux!=at.finaux.end())
+    {
+        at.epsilon[*itr_finaux+1].insert(at.epsilon[*itr_finaux+1].end(),at.nb_etats);//le +1 est là à cause du décalage fait précedemment pour ajouter l'état de départ générique ; at.trans et at.epsilon ont été mis à jour mais pas at.finaux
+        itr_finaux++;
+    }
+    std::cout << "epsilon : " << at.epsilon <<std::endl;
+
+    //mise à jour de at.nb_finaux et at.finaux
+    std::cout << "nb_finaux : " << at.nb_finaux <<std::endl;
+    std::cout << "at.finaux : " << at.finaux <<std::endl;
+    at.nb_finaux=1;
+    at.finaux.clear();
+    at.finaux.insert(at.finaux.begin(), at.nb_etats);
+    std::cout << "nb_finaux : " << at.nb_finaux <<std::endl;
+    std::cout << "at.finaux : " << at.finaux <<std::endl;
+
+
+    /* ******************************************************* */
+    /* *******Construction de l'expression rationnelle ******* */
+    /* ******************************************************* */
+
+    std::cout<<"Sr : "<<sr<<std::endl;
 
 
 
