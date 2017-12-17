@@ -197,7 +197,7 @@ std::cout << "****************************************" <<std::endl;
 
     /* CODER DANS ACCEPT ; A LA FIN ! */
 
-  std::string sr;
+  std::string sr, A, B, C, D;
   unsigned int j, k;
   std::vector<etatset_t> tmp_vect_es;
   etatset_t tmp_es, tmp_copie_es;
@@ -396,20 +396,83 @@ std::cout << "****************************************" <<std::endl;
         {
             if(j!=k)
             {
+                std::cout << "----------" <<std::endl;
+                std::cout << "transitions["<<i<<"]["<<k<<"]: " << transitions[i][k] <<std::endl;
+                std::cout << "transitions["<<k<<"]["<<j<<"]: " << transitions[k][j] <<std::endl;
                 //test l'existance d'une transition de i à j par k
                 trans_ijk = false;
                 if(transitions[i][k]!="-1")
                 {
                     if(transitions[k][j]!="-1")
                     {
+                        std::cout << "true" << std::endl;
                         trans_ijk=true;
                     }
                 }
                 if(trans_ijk)
                 {
                     //transitions[i][j]=D|A.C*.B;
+                    A="";
+                    B="";
+                    C="";
+                    D="";
+                    if(transitions[i][j]!="-1")
+                    {
+                        std::cout << "D" << std::endl;
+                        D=transitions[i][j];
+                    }
+                    if(transitions[k][k]!="-1")
+                    {
+                        std::cout << "C" << std::endl;
+                        C=transitions[k][k]+"*";
+                    }
+                    if(transitions[i][k]!="E")
+                    {
+                        std::cout << "A" << std::endl;
+                        A=transitions[i][k];
+                    }
+                    if(transitions[k][j]!="E")
+                    {
+                        std::cout << "B" << std::endl;
+                        B=transitions[k][j];
+                    }
+
+                    if(D!="")
+                    {
+                        transitions[i][j]=D;
+                        if((A!="")||(B!="")||(C!=""))
+                        {
+                            transitions[i][j]=transitions[i][j]+"|";
+                        }
+                    }
+                    else
+                    {
+                        transitions[i][j]="";
+                    }
+                    if(A!="")
+                    {
+                        transitions[i][j]=transitions[i][j]+A;
+                        if((B!="")||(C!=""))
+                        {
+                            transitions[i][j]=transitions[i][j]+".";
+                        }
+                    }
+                    if(C!="")
+                    {
+                        transitions[i][j]=transitions[i][j]+C;
+                        if((B!=""))
+                        {
+                            transitions[i][j]=transitions[i][j]+".";
+                        }
+                    }
+                    if(B!="")
+                    {
+                        transitions[i][j]=transitions[i][j]+B;
+                    }
+                    std::cout << "transitions[i][j] : "<< transitions[i][j] << std::endl;
                 }
                 transitions[k][j]="-1";
+                //transitions[j][k]="-1";
             }// end if(j!=k)
             j++;
         }// end while(j<at.nb_etats)
