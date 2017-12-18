@@ -21,6 +21,10 @@ etatset_t Delta(const sAutoNDE& at, const etatset_t& e, symb_t c);
 
 bool Accept( sAutoNDE& at, std::string str);
 
+////////////////////////////////////////////////////////////////////////////////
+
+void setTransition(unsigned int nb_etats, std::vector<std::vector<std::string>> &transitions, unsigned int i, unsigned int k);
+
 //******************************************************************************
 #endif // ACCEPT_H
 //******************************************************************************

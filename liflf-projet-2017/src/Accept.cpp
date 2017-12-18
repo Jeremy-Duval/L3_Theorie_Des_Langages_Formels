@@ -470,13 +470,21 @@ std::cout << "****************************************" <<std::endl;
                         transitions[i][j]=transitions[i][j]+B;
                     }
                     std::cout << "transitions[i][j] : "<< transitions[i][j] << std::endl;
+                    setTransition(at.nb_etats, transitions, j, k);
                 }
-                transitions[k][j]="-1";
+                //transitions[k][j]="-1";
                 //transitions[j][k]="-1";
             }// end if(j!=k)
             j++;
         }// end while(j<at.nb_etats)
         transitions[k][k]=-1; //transition d'un etat vers lui-même
+        j=0;
+        while(j<at.nb_etats) //suppression des transition vers/depuis l'état k
+        {
+            transitions[k][j]="-1";
+            transitions[i][k]="-1";
+            j++;
+        }
         k++;
     }// end while(k<at.nb_etats-1)
 
@@ -496,6 +504,100 @@ std::cout << "****************************************" <<std::endl;
 
 
     return est_accepte;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void setTransition(unsigned int nb_etats, std::vector<std::vector<std::string>> &transitions, unsigned int i, unsigned int k)
+{
+    std::string A, B, C, D;
+    unsigned int j;
+    bool trans_ijk;
+
+     while(j<nb_etats)
+        {
+            if((j!=k)&&(j!=i))
+            {
+                std::cout << "__________" <<std::endl;
+                std::cout << "transitions["<<i<<"]["<<k<<"]: " << transitions[i][k] <<std::endl;
+                std::cout << "transitions["<<k<<"]["<<j<<"]: " << transitions[k][j] <<std::endl;
+                //test l'existance d'une transition de i à j par k
+                trans_ijk = false;
+                if(transitions[i][k]!="-1")
+                {
+                    if(transitions[k][j]!="-1")
+                    {
+                        std::cout << "true" << std::endl;
+                        trans_ijk=true;
+                    }
+                }
+                if(trans_ijk)
+                {
+                    //transitions[i][j]=D|A.C*.B;
+                    A="";
+                    B="";
+                    C="";
+                    D="";
+                    if(transitions[i][j]!="-1")
+                    {
+                        std::cout << "D" << std::endl;
+                        D=transitions[i][j];
+                    }
+                    if(transitions[k][k]!="-1")
+                    {
+                        std::cout << "C" << std::endl;
+                        C=transitions[k][k]+"*";
+                    }
+                    if(transitions[i][k]!="E")
+                    {
+                        std::cout << "A" << std::endl;
+                        A=transitions[i][k];
+                    }
+                    if(transitions[k][j]!="E")
+                    {
+                        std::cout << "B" << std::endl;
+                        B=transitions[k][j];
+                    }
+
+                    if(D!="")
+                    {
+                        transitions[i][j]=D;
+                        if((A!="")||(B!="")||(C!=""))
+                        {
+                            transitions[i][j]=transitions[i][j]+"|";
+                        }
+                    }
+                    else
+                    {
+                        transitions[i][j]="";
+                    }
+                    if(A!="")
+                    {
+                        transitions[i][j]=transitions[i][j]+A;
+                        if((B!="")||(C!=""))
+                        {
+                            transitions[i][j]=transitions[i][j]+".";
+                        }
+                    }
+                    if(C!="")
+                    {
+                        transitions[i][j]=transitions[i][j]+C;
+                        if((B!=""))
+                        {
+                            transitions[i][j]=transitions[i][j]+".";
+                        }
+                    }
+                    if(B!="")
+                    {
+                        transitions[i][j]=transitions[i][j]+B;
+                    }
+                    std::cout << "transitions[i][j] : "<< transitions[i][j] << std::endl;
+                }
+                //transitions[k][j]="-1";
+                //transitions[j][k]="-1";
+            }// end if(j!=k)
+            j++;
+        }// end while(j<at.nb_etats)
 }
 
 //******************************************************************************
