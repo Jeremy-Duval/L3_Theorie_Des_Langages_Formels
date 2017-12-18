@@ -24,6 +24,10 @@ bool PseudoEquivalent(const sAutoNDE& a1, const sAutoNDE& a2, unsigned int word_
 // à un renommage des états près
 bool Equivalent(const sAutoNDE& a1, const sAutoNDE& a2);
 
+////////////////////////////////////////////////////////////////////////////////
+
+void setTransition(unsigned int nb_etats, std::vector<std::vector<std::string>> &transitions, unsigned int i, unsigned int k);
+
 //******************************************************************************
 #endif // EQUIVALENCE_H
 //******************************************************************************
