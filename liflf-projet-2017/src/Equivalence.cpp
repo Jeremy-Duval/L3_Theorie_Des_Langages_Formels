@@ -273,9 +273,33 @@ std::string Automate2ExpressionRationnelle(sAutoNDE &at){
 ////////////////////////////////////////////////////////////////////////////////
 
 bool PseudoEquivalent(const sAutoNDE& a1, const sAutoNDE& a2, unsigned int word_size_max) {
-  //TODO définir cette fonction
+  bool pseudo_eq;
+  unsigned int i;
+  std::string mot_test;
 
-  return true;
+  pseudo_eq = true;
+  if(a1.nb_symbs==a2.nb_symbs)
+  {
+      //TODO E-trans
+
+      //Test des mots
+      if(word_size_max>0)//si l'on test des mot plus grand que le mot vide
+      {
+          i=0;
+          while(i<a1.nb_symbs)
+          {
+              mot_test = i+ASCII_A;
+              pseudo_eq = pseudo_eq && PseudoEquivalentRec(a1, a2, word_size_max, mot_test);
+              i++;
+          }
+      }
+  }
+  else
+  {
+      pseudo_eq = false;
+  }
+
+  return pseudo_eq;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -369,4 +393,34 @@ void setTransition(unsigned int nb_etats, std::vector<std::vector<std::string>> 
         }// end while(j<at.nb_etats)
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
+bool PseudoEquivalentRec(const sAutoNDE& a1, const sAutoNDE& a2, unsigned int word_size_max, std::string mot_a_tester)
+{
+    bool pseudo_eq;
+    unsigned int i;
+    std::string tmp_lettre;
+
+    if(((Accept(a1, mot_a_tester))&&(Accept(a2, mot_a_tester)))||((!Accept(a1, mot_a_tester))&&(!Accept(a2, mot_a_tester))))//si le mot est accepter par les deux automates ou refuser par les deux automates
+    {
+        pseudo_eq = true;
+
+        if(word_size_max>mot_a_tester.size())
+        {
+            i=0;
+            while(i<a1.nb_symbs)
+            {
+                tmp_lettre = i+ASCII_A;
+                pseudo_eq = pseudo_eq && PseudoEquivalentRec(a1, a2, word_size_max, mot_a_tester+tmp_lettre);
+                i++;
+            }
+        }
+    }
+    else
+    {
+        pseudo_eq = false;
+    }
+
+    return pseudo_eq;
+}
 //******************************************************************************

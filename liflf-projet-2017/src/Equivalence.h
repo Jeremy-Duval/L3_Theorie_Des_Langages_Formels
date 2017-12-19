@@ -4,6 +4,7 @@
 //******************************************************************************
 
 #include "FA_types.h"
+#include "Accept.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -27,6 +28,10 @@ bool Equivalent(const sAutoNDE& a1, const sAutoNDE& a2);
 ////////////////////////////////////////////////////////////////////////////////
 
 void setTransition(unsigned int nb_etats, std::vector<std::vector<std::string>> &transitions, unsigned int i, unsigned int k);
+
+////////////////////////////////////////////////////////////////////////////////
+
+bool PseudoEquivalentRec(const sAutoNDE& a1, const sAutoNDE& a2, unsigned int word_size_max, std::string mot_a_tester);
 
 //******************************************************************************
 #endif // EQUIVALENCE_H
