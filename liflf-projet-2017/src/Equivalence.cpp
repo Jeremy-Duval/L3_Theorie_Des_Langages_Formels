@@ -7,19 +7,20 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-std::string Automate2ExpressionRationnelle(sAutoNDE &at){
+std::string Automate2ExpressionRationnelle(sAutoNDE &at)
+{
 
-  std::string sr, A, B, C, D;
-  unsigned int i, j, k;
-  std::vector<etatset_t> tmp_vect_es;
-  etatset_t tmp_es, tmp_copie_es;
-  std::vector<std::vector<std::string>> transitions;
-  std::vector<std::string> tmp_vect_str;
-  bool trans_ijk;
+    std::string sr, A, B, C, D;
+    unsigned int i, j, k;
+    std::vector<etatset_t> tmp_vect_es;
+    etatset_t tmp_es, tmp_copie_es;
+    std::vector<std::vector<std::string>> transitions;
+    std::vector<std::string> tmp_vect_str;
+    bool trans_ijk;
 
-  /* ******************************************************* */
-  /* **********Arrangement de l'automate en entrée********** */
-  /* ******************************************************* */
+    /* ******************************************************* */
+    /* **********Arrangement de l'automate en entrée********** */
+    /* ******************************************************* */
 
     /* ***Décalage des symbole et ajout d'un état de départ  générique***/
     at.nb_etats++;
@@ -39,16 +40,16 @@ std::string Automate2ExpressionRationnelle(sAutoNDE &at){
     while(itr_ie<at.epsilon.end())
     {
 
-            //init etat_set
-            tmp_copie_es.clear();
+        //init etat_set
+        tmp_copie_es.clear();
 
-            auto itr_set=at.epsilon[i].begin();
-            while(itr_set!=at.epsilon[i].end())
-            {
-                tmp_copie_es.insert(itr_set,*itr_set+1);
-                itr_set++;
+        auto itr_set=at.epsilon[i].begin();
+        while(itr_set!=at.epsilon[i].end())
+        {
+            tmp_copie_es.insert(itr_set,*itr_set+1);
+            itr_set++;
 
-            }
+        }
 
         //clean at.trans[i][j]
         at.epsilon.erase(itr_ie);
@@ -249,7 +250,7 @@ std::string Automate2ExpressionRationnelle(sAutoNDE &at){
                     {
                         transitions[i][j]=transitions[i][j]+B;
                     }
-                     setTransition(at.nb_etats, transitions, j, k);
+                    setTransition(at.nb_etats, transitions, j, k);
                 }
             }// end if(j!=k)
             j++;
@@ -267,47 +268,77 @@ std::string Automate2ExpressionRationnelle(sAutoNDE &at){
 
     sr = transitions[0][at.nb_etats-1];
 
-  return sr;
+    return sr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool PseudoEquivalent(const sAutoNDE& a1, const sAutoNDE& a2, unsigned int word_size_max) {
-  bool pseudo_eq;
-  unsigned int i;
-  std::string mot_test;
+bool PseudoEquivalent(const sAutoNDE& a1, const sAutoNDE& a2, unsigned int word_size_max)
+{
+    bool pseudo_eq, a1_accept_mvide, a2_accept_mvide;
+    unsigned int i;
+    std::string mot_test;
 
-  pseudo_eq = true;
-  if(a1.nb_symbs==a2.nb_symbs)
-  {
-      //TODO E-trans
+    pseudo_eq = true;
+    if(a1.nb_symbs==a2.nb_symbs)
+    {
+        //Test mot vide : etat initial dans etat final ?
+        a1_accept_mvide = true;
+        auto itr = a1.finaux.begin();
+        while(itr!=a1.finaux.end())
+        {
+            if(*itr!=a1.initial)
+            {
+                a1_accept_mvide = false;
+            }
+            itr++;
+            std::cout<<"1"<<std::endl;
+        }
+        a2_accept_mvide = true;
+        auto itr2 = a2.finaux.begin();
+        while(itr2!=a2.finaux.end())
+        {
+            if(*itr2!=a1.initial)
+            {
+                a2_accept_mvide = false;
+            }
+            itr2++;
+        }
 
-      //Test des mots
-      if(word_size_max>0)//si l'on test des mot plus grand que le mot vide
-      {
-          i=0;
-          while(i<a1.nb_symbs)
-          {
-              mot_test = i+ASCII_A;
-              pseudo_eq = pseudo_eq && PseudoEquivalentRec(a1, a2, word_size_max, mot_test);
-              i++;
-          }
-      }
-  }
-  else
-  {
-      pseudo_eq = false;
-  }
+        if(((a1_accept_mvide)&&(a2_accept_mvide))||((!a1_accept_mvide)&&(!a2_accept_mvide)))
+        {
+            //Test des mots <= à la taille max de mot à tester
+            if(word_size_max>0)//si l'on test des mot plus grand que le mot vide
+            {
+                i=0;
+                while(i<a1.nb_symbs)
+                {
+                    mot_test = i+ASCII_A;
+                    pseudo_eq = pseudo_eq && PseudoEquivalentRec(a1, a2, word_size_max, mot_test);
+                    i++;
+                }
+            }
+        }
+        else
+        {
+            pseudo_eq = false;
+        }
+    }
+    else
+    {
+        pseudo_eq = false;
+    }
 
-  return pseudo_eq;
+    return pseudo_eq;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool Equivalent(const sAutoNDE& a1, const sAutoNDE& a2) {
-  //TODO définir cette fonction
+bool Equivalent(const sAutoNDE& a1, const sAutoNDE& a2)
+{
+    //TODO définir cette fonction
 
-  return true;
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -318,79 +349,79 @@ void setTransition(unsigned int nb_etats, std::vector<std::vector<std::string>> 
     unsigned int j;
     bool trans_ijk;
 
-     while(j<nb_etats)
+    while(j<nb_etats)
+    {
+        if((j!=k)&&(j!=i))
         {
-            if((j!=k)&&(j!=i))
+            //test l'existance d'une transition de i à j par k
+            trans_ijk = false;
+            if(transitions[i][k]!="-1")
             {
-                //test l'existance d'une transition de i à j par k
-                trans_ijk = false;
-                if(transitions[i][k]!="-1")
+                if(transitions[k][j]!="-1")
                 {
-                    if(transitions[k][j]!="-1")
-                    {
-                        trans_ijk=true;
-                    }
+                    trans_ijk=true;
                 }
-                if(trans_ijk)
+            }
+            if(trans_ijk)
+            {
+                //transitions[i][j]=D|A.C*.B;
+                A="";
+                B="";
+                C="";
+                D="";
+                if(transitions[i][j]!="-1")
                 {
-                    //transitions[i][j]=D|A.C*.B;
-                    A="";
-                    B="";
-                    C="";
-                    D="";
-                    if(transitions[i][j]!="-1")
-                    {
-                        D=transitions[i][j];
-                    }
-                    if(transitions[k][k]!="-1")
-                    {
-                        C=transitions[k][k]+"*";
-                    }
-                    if(transitions[i][k]!="E")
-                    {
-                        A=transitions[i][k];
-                    }
-                    if(transitions[k][j]!="E")
-                    {
-                        B=transitions[k][j];
-                    }
+                    D=transitions[i][j];
+                }
+                if(transitions[k][k]!="-1")
+                {
+                    C=transitions[k][k]+"*";
+                }
+                if(transitions[i][k]!="E")
+                {
+                    A=transitions[i][k];
+                }
+                if(transitions[k][j]!="E")
+                {
+                    B=transitions[k][j];
+                }
 
-                    if(D!="")
+                if(D!="")
+                {
+                    transitions[i][j]=D;
+                    if((A!="")||(B!="")||(C!=""))
                     {
-                        transitions[i][j]=D;
-                        if((A!="")||(B!="")||(C!=""))
-                        {
-                            transitions[i][j]=transitions[i][j]+"|";
-                        }
-                    }
-                    else
-                    {
-                        transitions[i][j]="";
-                    }
-                    if(A!="")
-                    {
-                        transitions[i][j]=transitions[i][j]+A;
-                        if((B!="")||(C!=""))
-                        {
-                            transitions[i][j]=transitions[i][j]+".";
-                        }
-                    }
-                    if(C!="")
-                    {
-                        transitions[i][j]=transitions[i][j]+C;
-                        if((B!=""))
-                        {
-                            transitions[i][j]=transitions[i][j]+".";
-                        }
-                    }
-                    if(B!="")
-                    {
-                        transitions[i][j]=transitions[i][j]+B;
+                        transitions[i][j]=transitions[i][j]+"|";
                     }
                 }
-            }// end if(j!=k)
-            j++;
-        }// end while(j<at.nb_etats)
+                else
+                {
+                    transitions[i][j]="";
+                }
+                if(A!="")
+                {
+                    transitions[i][j]=transitions[i][j]+A;
+                    if((B!="")||(C!=""))
+                    {
+                        transitions[i][j]=transitions[i][j]+".";
+                    }
+                }
+                if(C!="")
+                {
+                    transitions[i][j]=transitions[i][j]+C;
+                    if((B!=""))
+                    {
+                        transitions[i][j]=transitions[i][j]+".";
+                    }
+                }
+                if(B!="")
+                {
+                    transitions[i][j]=transitions[i][j]+B;
+                }
+            }
+        }// end if(j!=k)
+        j++;
+    }// end while(j<at.nb_etats)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
