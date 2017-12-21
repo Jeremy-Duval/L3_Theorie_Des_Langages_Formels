@@ -20,5 +20,9 @@ src/              fichiers sources C++
 
 Commentaires
 ------------
-
+*Partie 1 :
 La fonction determinize n'a pas pu être terminée dans les délais, le fichier determinize.cpp peut cependant être compilé et la fonction testée. Celle-ci ne retournera pas l'automate voulu, seul un retour écrit dans la sortie standard qui retrace les opérations effectuées peut être observé en cas d'exécution de la commande "./ndet -det [IN] [OUT]".
+
+*Partie 2 :
+Automate2ExpressionRationnelle ne fonctionne pas (erreur de segmentation) pour AND1, ANDE 2,4 et 5. Le problème à été situé mais n'a pas pû être corrigé. Il y a aussi des expressions rationnelles qui semblent incorectes, comme pour ANDE7. Les test avec AD1 et ANDE3 sont vérifiés et corrects.
+

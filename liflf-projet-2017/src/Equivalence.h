@@ -4,10 +4,11 @@
 //******************************************************************************
 
 #include "FA_types.h"
+#include "Accept.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
-std::string Automate2ExpressionRationnelle(sAutoNDE at);
+std::string Automate2ExpressionRationnelle(sAutoNDE &at);
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -23,6 +24,14 @@ bool PseudoEquivalent(const sAutoNDE& a1, const sAutoNDE& a2, unsigned int word_
 //   - même table de transition
 // à un renommage des états près
 bool Equivalent(const sAutoNDE& a1, const sAutoNDE& a2);
+
+////////////////////////////////////////////////////////////////////////////////
+
+void setTransition(unsigned int nb_etats, std::vector<std::vector<std::string>> &transitions, unsigned int i, unsigned int k);
+
+////////////////////////////////////////////////////////////////////////////////
+
+bool PseudoEquivalentRec(const sAutoNDE& a1, const sAutoNDE& a2, unsigned int word_size_max, std::string mot_a_tester);
 
 //******************************************************************************
 #endif // EQUIVALENCE_H
