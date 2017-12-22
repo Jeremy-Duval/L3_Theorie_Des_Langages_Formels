@@ -16,7 +16,7 @@ const bool         DEBUG = false;
 typedef size_t                              etat_t;
 typedef unsigned char                       symb_t;
 typedef std::set<etat_t>                    etatset_t;
-typedef std::vector<std::vector<etatset_t>> trans_t;
+typedef std::vector<std::vector<etatset_t> > trans_t;
 typedef std::vector<etatset_t>              epsilon_t;
 typedef std::map<etatset_t, etat_t>         map_t;
 
@@ -38,8 +38,8 @@ struct sAutoNDE{
   trans_t trans;
   // matrice de transition : trans_t peut être un int***, une structure dynamique 3D comme vector< vector< set<int> > >
   // ou une autre structure de donnée de votre choix.
-  
-  epsilon_t epsilon; 
+
+  epsilon_t epsilon;
   // transitions spontanées : epsilon_t peut être un int**, une structure dynamique 2D comme vector< set<int> >
   // ou une autre structure de donnée de votre choix.
 };
