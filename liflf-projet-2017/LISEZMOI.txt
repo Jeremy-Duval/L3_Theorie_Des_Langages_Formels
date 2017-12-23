@@ -25,4 +25,5 @@ La fonction determinize n'a pas pu être terminée dans les délais, le fichier 
 
 *Partie 2 :
 Automate2ExpressionRationnelle ne fonctionne pas (erreur de segmentation) pour AND1, ANDE 2,4 et 5. Le problème à été situé mais n'a pas pû être corrigé. Il y a aussi des expressions rationnelles qui semblent incorectes, comme pour ANDE7. Les test avec AD1 et ANDE3 sont vérifiés et corrects.
-
+Nous avons récupérer une fonction determinize auprès d'un autre groupe puisque la notre ne fonctionnait pas mais était nécessaire pour le fonctionnement de la fonction minimize.
+Nous n'avons pas terminé la partie concernant l'équivalence de deux automates.

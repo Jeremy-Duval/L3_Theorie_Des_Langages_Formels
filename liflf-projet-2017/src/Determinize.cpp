@@ -79,7 +79,7 @@ sAutoNDE Determinize(const sAutoNDE& at){
               r.nb_finaux = r.finaux.size();
           return r;
     }else return at;
-
+}
 
 /*
 sAutoNDE Determinize(const sAutoNDE& at)

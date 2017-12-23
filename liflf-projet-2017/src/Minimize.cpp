@@ -41,7 +41,7 @@ sAutoNDE Minimize(const sAutoNDE& aOrigine)
             etatset_t::iterator etatIt;
             for (etatIt = etatSetEnCours.begin() ; etatIt != etatSetEnCours.end() ; etatIt++){
                 vector<etatset_t> etatSetsAtteignables;
-                for(int numSymbol=0 ; numSymbol < aOrigine.nb_symbs ; numSymbol++){
+                for(unsigned int numSymbol=0 ; numSymbol < aOrigine.nb_symbs ; numSymbol++){
                     symb_t symboleEnCours = ASCII_A + numSymbol;
                     etatSetsAtteignables.insert(etatSetsAtteignables.end(),Delta(aOrigine,*etatsetIt,symboleEnCours));
                 }
@@ -95,13 +95,55 @@ sAutoNDE Minimize(const sAutoNDE& aOrigine)
         paireEnCours.first = i;
         paireEnCours.second = *etatSetIt;
         groupeEtats.insert(groupeEtats.end(),paireEnCours);
-
+        ///On en profite pour ajouter les états finaux à l'automate minimal
+        etatset_t etatSetEnCours = *etatSetIt;
+        for(etatset_t::iterator etatIt = etatSetEnCours.begin() ; etatIt != etatSetEnCours.end() ; etatIt++){
+            for(etatset_t::iterator etatIt2 = aOrigine.finaux.begin() ; etatIt2 != aOrigine.finaux.end() ; etatIt2++){
+                if (*etatIt == *etatIt2){
+                    aMinimal.finaux.insert(aMinimal.finaux.end(),i);
+                    aMinimal.nb_finaux++;
+                }
+            }
+        }
         i++;
     }
-    ///On parcours cette liste pour trouver les nouveaux états finaux
-    for(map<int,etatset_t>::iterator pairIt = groupeEtats.begin() )
-    aMinimal.nb_finaux = aMinimal.finaux.size();
-
+    ///On ajoute les transitions
+    for(map<int, etatset_t>::iterator pairIt = groupeEtats.begin() ; pairIt != groupeEtats.end() ; pairIt++){
+        ///On commence par trouver la "cible d'origine" de chaque classe pour chaque lettre
+        pair<int,etatset_t> paireEnCours;
+        etatset_t eSEnCours = paireEnCours.second;
+        etat_t eEnCours = *(eSEnCours.begin());
+        for(unsigned int numSymbol=0 ; numSymbol < aOrigine.nb_symbs ; numSymbol++){
+            symb_t symboleEnCours = ASCII_A + numSymbol;
+            ///(Delta ne fonctionne qu'avec un etatSet, alors on met l'etat seul dans un nouvel etatSet)
+            etatset_t eSEnCoursFiltre; eSEnCoursFiltre.insert(eSEnCoursFiltre.begin(),eEnCours);
+            etatset_t eSCibleOrigine = Delta(aOrigine,eSEnCoursFiltre,symboleEnCours);
+            etat_t  eCibleOrigine = *(eSCibleOrigine.begin());
+            ///Puis on en déduit la "cible minimale"
+            etatset_t cibleMinimale;
+            for(map<int, etatset_t>::iterator pairIt2 = groupeEtats.begin() ; pairIt2 != groupeEtats.end() ; pairIt2++){
+                pair<int,etatset_t> paireEnCours2;
+                etatset_t eSEnCours2 = paireEnCours2.second;
+                etat_t eEnCours2 = *(eSEnCours2.begin());
+                if(eEnCours2 == eCibleOrigine){
+                    cibleMinimale.insert(eEnCours2);
+                    aMinimal.trans[eEnCours][numSymbol] = cibleMinimale;
+                }
+            }
+        }
+    }
+    /*for(map<int, etatset_t>::iterator pairIt = groupeEtats.begin() ; pairIt != groupeEtats.end() ; pairIt++){
+        pair<int,etatset_t> paireEnCours;
+        etatset_t eSEnCours = paireEnCours.second;
+        etat_t eEnCours = *(eSEnCours.begin());
+        for(int numSymbol=0 ; numSymbol < aOrigine.nb_symbs ; numSymbol++){
+            symb_t symboleEnCours = ASCII_A + numSymbol;
+            ///Delta ne fonctionne qu'avec un etatSet, alors on met l'etat seul dans un nouvel etatSet
+            etatset_t eSEnCoursFiltre; eSEnCoursFiltre.insert(eSEnCoursFiltre.begin(),eEnCours);
+            etatset_t eSCible = Delta(aOrigine,eSEnCoursFiltre,symboleEnCours);
+            etat_t  eCible = *(eSCible.begin());
+        }
+    }*/
     return aMinimal;
 }
 
